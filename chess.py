@@ -21,7 +21,7 @@ w_pawn = p.Pawn(screen, 'white', 3, 2)
 clock = pygame.time.Clock()
 
 def run_game():
-    # Initialize and set up screen.
+    # Initialize and set up the screen.
     pygame.init()
     pygame.display.set_caption("Échecs")
 
