@@ -1,14 +1,13 @@
 import pygame
 
 show = False
+piece = None
 
 def check_button_click(buttons):
-
+    """"""
     global piece
     global show
     import chess as c
-    if show:
-        show_piece(piece)
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONDOWN:
             mouse_x, mouse_y = pygame.mouse.get_pos()
@@ -36,12 +35,22 @@ def check_button_click(buttons):
                     elif button.text == 'b_pawn':
                         piece = c.b_pawn
                         show = True
-        else:
-            pass
+                    else:
+                        pass
+            if piece:
+                event_pos = mouse_x, mouse_y
+                piece.update_click(event_pos)
 
-def show_piece(piece_showed):
-    """"""
-    piece_showed.update()
+        elif event.type == pygame.MOUSEMOTION:
+            if piece:
+                piece.update_motion(event.pos)
+
+        elif event.type == pygame.MOUSEBUTTONUP:
+            if piece:
+                piece.update_release(event.pos)
+
+    if piece:
+        piece.show()
 
 
 

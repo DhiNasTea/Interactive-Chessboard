@@ -46,57 +46,61 @@ class Bishop():
         """Show a bishop at the screen."""
         self.screen.blit(self.image, self.rect_piece)
 
-    def update(self):
-        """Make a piece follow the mouse."""
-
+    def update_click(self, event_pos):
+        """"""
         global offset_x, offset_y
         global initial_x, initial_y
         global final_x, final_y
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                sys.exit()
+        if self.rect_piece.collidepoint(event_pos):
+            self.mouse_touch_piece = True
+            self.rectangle_draging = True
+            mouse_x, mouse_y = event_pos
+            offset_x = self.xcenter - mouse_x
+            offset_y = self.ycenter - mouse_y
+            initial_pos = mc.mouse_coordinates_click(mouse_x, mouse_y)
+            if initial_pos:
+                initial_x, initial_y = initial_pos
+            self.rect_piece.centerx = self.xcenter
+            self.rect_piece.centery = self.ycenter
 
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    if self.rect_piece.collidepoint(event.pos):
-                        self.mouse_touch_piece = True
-                        self.rectangle_draging = True
-                        mouse_x, mouse_y = event.pos
-                        offset_x = self.xcenter - mouse_x
-                        offset_y = self.ycenter - mouse_y
-                        initial_pos = mc.mouse_coordinates_click(mouse_x, mouse_y)
-                        if initial_pos:
-                            initial_x, initial_y = initial_pos
+    def update_release(self, event_pos):
+        """"""
+        global offset_x, offset_y
+        global initial_x, initial_y
+        global final_x, final_y
+        if self.mouse_touch_piece:
+            mouse_x, mouse_y = event_pos
+            self.rectangle_draging = False
+            final_pos = mc.mouse_coordinates_release(mouse_x, mouse_y)
+            if final_pos:
+                final_x, final_y = final_pos
+                position = vm.move_legal_bishop(initial_x, initial_y, final_x, final_y)
 
-            elif event.type == pygame.MOUSEBUTTONUP:
-                if event.button == 1 and self.mouse_touch_piece:
-                    mouse_x, mouse_y = event.pos
-                    self.rectangle_draging = False
-                    final_pos = mc.mouse_coordinates_release(mouse_x, mouse_y)
-                    if final_pos:
-                        final_x, final_y = final_pos
-                        position = vm.move_legal_bishop(initial_x, initial_y, final_x, final_y)
+                if position:
+                    x, y = position
+                    pixels = get_pixel_position(x, y)
+                    self.xcenter, self.ycenter = pixels
+                    self.xbefore, self.ybefore = self.xcenter, self.ycenter
+                else:
+                    self.xcenter, self.ycenter = self.xbefore, self.ybefore
+            else:
+                self.xcenter, self.ycenter = self.xbefore, self.ybefore
+        self.mouse_touch_piece = False
+        self.rect_piece.centerx = self.xcenter
+        self.rect_piece.centery = self.ycenter
 
-                        if position:
-                            x, y = position
-                            pixels = get_pixel_position(x, y)
-                            self.xcenter, self.ycenter = pixels
-                            self.xbefore, self.ybefore = self.xcenter, self.ycenter
-                        else:
-                            self.xcenter, self.ycenter = self.xbefore, self.ybefore
-                    else:
-                        self.xcenter, self.ycenter = self.xbefore, self.ybefore
-                self.mouse_touch_piece = False
-
-            elif event.type == pygame.MOUSEMOTION:
-                if self.rectangle_draging:
-                    mouse_x, mouse_y = event.pos
-                    self.xcenter = mouse_x + offset_x
-                    self.ycenter = mouse_y + offset_y
+    def update_motion(self, event_pos):
+        """"""
+        global offset_x, offset_y
+        global initial_x, initial_y
+        global final_x, final_y
+        if self.rectangle_draging:
+            mouse_x, mouse_y = event_pos
+            self.xcenter = mouse_x + offset_x
+            self.ycenter = mouse_y + offset_y
 
         self.rect_piece.centerx = self.xcenter
         self.rect_piece.centery = self.ycenter
-        self.show()
 
 
 class Pawn():
@@ -133,57 +137,61 @@ class Pawn():
         """Show a pawn at the screen."""
         self.screen.blit(self.image, self.rect_piece)
 
-    def update(self):
-        """Make a piece follow the mouse."""
-
+    def update_click(self, event_pos):
+        """"""
         global offset_x, offset_y
         global initial_x, initial_y
         global final_x, final_y
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                sys.exit()
+        if self.rect_piece.collidepoint(event_pos):
+            self.mouse_touch_piece = True
+            self.rectangle_draging = True
+            mouse_x, mouse_y = event_pos
+            offset_x = self.xcenter - mouse_x
+            offset_y = self.ycenter - mouse_y
+            initial_pos = mc.mouse_coordinates_click(mouse_x, mouse_y)
+            if initial_pos:
+                initial_x, initial_y = initial_pos
+            self.rect_piece.centerx = self.xcenter
+            self.rect_piece.centery = self.ycenter
 
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    if self.rect_piece.collidepoint(event.pos):
-                        self.mouse_touch_piece = True
-                        self.rectangle_draging = True
-                        mouse_x, mouse_y = event.pos
-                        offset_x = self.xcenter - mouse_x
-                        offset_y = self.ycenter - mouse_y
-                        initial_pos = mc.mouse_coordinates_click(mouse_x, mouse_y)
-                        if initial_pos:
-                            initial_x, initial_y = initial_pos
+    def update_release(self, event_pos):
+        """"""
+        global offset_x, offset_y
+        global initial_x, initial_y
+        global final_x, final_y
+        if self.mouse_touch_piece:
+            mouse_x, mouse_y = event_pos
+            self.rectangle_draging = False
+            final_pos = mc.mouse_coordinates_release(mouse_x, mouse_y)
+            if final_pos:
+                final_x, final_y = final_pos
+                position = vm.move_legal_pawn(initial_x, initial_y, final_x, final_y, self.color)
 
-            elif event.type == pygame.MOUSEBUTTONUP:
-                if event.button == 1 and self.mouse_touch_piece:
-                    mouse_x, mouse_y = event.pos
-                    self.rectangle_draging = False
-                    final_pos = mc.mouse_coordinates_release(mouse_x, mouse_y)
-                    if final_pos:
-                        final_x, final_y = final_pos
-                        position = vm.move_legal_pawn(initial_x, initial_y, final_x, final_y, self.color)
+                if position:
+                    x, y = position
+                    pixels = get_pixel_position(x, y)
+                    self.xcenter, self.ycenter = pixels
+                    self.xbefore, self.ybefore = self.xcenter, self.ycenter
+                else:
+                    self.xcenter, self.ycenter = self.xbefore, self.ybefore
+            else:
+                self.xcenter, self.ycenter = self.xbefore, self.ybefore
+        self.mouse_touch_piece = False
+        self.rect_piece.centerx = self.xcenter
+        self.rect_piece.centery = self.ycenter
 
-                        if position:
-                            x, y = position
-                            pixels = get_pixel_position(x, y)
-                            self.xcenter, self.ycenter = pixels
-                            self.xbefore, self.ybefore = self.xcenter, self.ycenter
-                        else:
-                            self.xcenter, self.ycenter = self.xbefore, self.ybefore
-                    else:
-                        self.xcenter, self.ycenter = self.xbefore, self.ybefore
-                self.mouse_touch_piece = False
-
-            elif event.type == pygame.MOUSEMOTION:
-                if self.rectangle_draging:
-                    mouse_x, mouse_y = event.pos
-                    self.xcenter = mouse_x + offset_x
-                    self.ycenter = mouse_y + offset_y
+    def update_motion(self, event_pos):
+        """"""
+        global offset_x, offset_y
+        global initial_x, initial_y
+        global final_x, final_y
+        if self.rectangle_draging:
+            mouse_x, mouse_y = event_pos
+            self.xcenter = mouse_x + offset_x
+            self.ycenter = mouse_y + offset_y
 
         self.rect_piece.centerx = self.xcenter
         self.rect_piece.centery = self.ycenter
-        self.show()
 
 
 class Knight():
@@ -219,57 +227,61 @@ class Knight():
         """Show a knight at the screen."""
         self.screen.blit(self.image, self.rect_piece)
 
-    def update(self):
-        """Make a piece follow the mouse."""
-
+    def update_click(self, event_pos):
+        """"""
         global offset_x, offset_y
         global initial_x, initial_y
         global final_x, final_y
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                sys.exit()
+        if self.rect_piece.collidepoint(event_pos):
+            self.mouse_touch_piece = True
+            self.rectangle_draging = True
+            mouse_x, mouse_y = event_pos
+            offset_x = self.xcenter - mouse_x
+            offset_y = self.ycenter - mouse_y
+            initial_pos = mc.mouse_coordinates_click(mouse_x, mouse_y)
+            if initial_pos:
+                initial_x, initial_y = initial_pos
+            self.rect_piece.centerx = self.xcenter
+            self.rect_piece.centery = self.ycenter
 
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    if self.rect_piece.collidepoint(event.pos):
-                        self.mouse_touch_piece = True
-                        self.rectangle_draging = True
-                        mouse_x, mouse_y = event.pos
-                        offset_x = self.xcenter - mouse_x
-                        offset_y = self.ycenter - mouse_y
-                        initial_pos = mc.mouse_coordinates_click(mouse_x, mouse_y)
-                        if initial_pos:
-                            initial_x, initial_y = initial_pos
+    def update_release(self, event_pos):
+        """"""
+        global offset_x, offset_y
+        global initial_x, initial_y
+        global final_x, final_y
+        if self.mouse_touch_piece:
+            mouse_x, mouse_y = event_pos
+            self.rectangle_draging = False
+            final_pos = mc.mouse_coordinates_release(mouse_x, mouse_y)
+            if final_pos:
+                final_x, final_y = final_pos
+                position = vm.move_legal_knight(initial_x, initial_y, final_x, final_y)
 
-            elif event.type == pygame.MOUSEBUTTONUP:
-                if event.button == 1 and self.mouse_touch_piece:
-                    mouse_x, mouse_y = event.pos
-                    self.rectangle_draging = False
-                    final_pos = mc.mouse_coordinates_release(mouse_x, mouse_y)
-                    if final_pos:
-                        final_x, final_y = final_pos
-                        position = vm.move_legal_knight(initial_x, initial_y, final_x, final_y)
+                if position:
+                    x, y = position
+                    pixels = get_pixel_position(x, y)
+                    self.xcenter, self.ycenter = pixels
+                    self.xbefore, self.ybefore = self.xcenter, self.ycenter
+                else:
+                    self.xcenter, self.ycenter = self.xbefore, self.ybefore
+            else:
+                self.xcenter, self.ycenter = self.xbefore, self.ybefore
+        self.mouse_touch_piece = False
+        self.rect_piece.centerx = self.xcenter
+        self.rect_piece.centery = self.ycenter
 
-                        if position:
-                            x, y = position
-                            pixels = get_pixel_position(x, y)
-                            self.xcenter, self.ycenter = pixels
-                            self.xbefore, self.ybefore = self.xcenter, self.ycenter
-                        else:
-                            self.xcenter, self.ycenter = self.xbefore, self.ybefore
-                    else:
-                        self.xcenter, self.ycenter = self.xbefore, self.ybefore
-                self.mouse_touch_piece = False
-
-            elif event.type == pygame.MOUSEMOTION:
-                if self.rectangle_draging:
-                    mouse_x, mouse_y = event.pos
-                    self.xcenter = mouse_x + offset_x
-                    self.ycenter = mouse_y + offset_y
+    def update_motion(self, event_pos):
+        """"""
+        global offset_x, offset_y
+        global initial_x, initial_y
+        global final_x, final_y
+        if self.rectangle_draging:
+            mouse_x, mouse_y = event_pos
+            self.xcenter = mouse_x + offset_x
+            self.ycenter = mouse_y + offset_y
 
         self.rect_piece.centerx = self.xcenter
         self.rect_piece.centery = self.ycenter
-        self.show()
 
 
 class Rook():
@@ -305,57 +317,61 @@ class Rook():
         """Show a rook at the screen."""
         self.screen.blit(self.image, self.rect_piece)
 
-    def update(self):
-        """Make a piece follow the mouse."""
-
+    def update_click(self, event_pos):
+        """"""
         global offset_x, offset_y
         global initial_x, initial_y
         global final_x, final_y
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                sys.exit()
+        if self.rect_piece.collidepoint(event_pos):
+            self.mouse_touch_piece = True
+            self.rectangle_draging = True
+            mouse_x, mouse_y = event_pos
+            offset_x = self.xcenter - mouse_x
+            offset_y = self.ycenter - mouse_y
+            initial_pos = mc.mouse_coordinates_click(mouse_x, mouse_y)
+            if initial_pos:
+                initial_x, initial_y = initial_pos
+            self.rect_piece.centerx = self.xcenter
+            self.rect_piece.centery = self.ycenter
 
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    if self.rect_piece.collidepoint(event.pos):
-                        self.mouse_touch_piece = True
-                        self.rectangle_draging = True
-                        mouse_x, mouse_y = event.pos
-                        offset_x = self.xcenter - mouse_x
-                        offset_y = self.ycenter - mouse_y
-                        initial_pos = mc.mouse_coordinates_click(mouse_x, mouse_y)
-                        if initial_pos:
-                            initial_x, initial_y = initial_pos
+    def update_release(self, event_pos):
+        """"""
+        global offset_x, offset_y
+        global initial_x, initial_y
+        global final_x, final_y
+        if self.mouse_touch_piece:
+            mouse_x, mouse_y = event_pos
+            self.rectangle_draging = False
+            final_pos = mc.mouse_coordinates_release(mouse_x, mouse_y)
+            if final_pos:
+                final_x, final_y = final_pos
+                position = vm.move_legal_rook(initial_x, initial_y, final_x, final_y)
 
-            elif event.type == pygame.MOUSEBUTTONUP:
-                if event.button == 1 and self.mouse_touch_piece:
-                    mouse_x, mouse_y = event.pos
-                    self.rectangle_draging = False
-                    final_pos = mc.mouse_coordinates_release(mouse_x, mouse_y)
-                    if final_pos:
-                        final_x, final_y = final_pos
-                        position = vm.move_legal_rook(initial_x, initial_y, final_x, final_y)
+                if position:
+                    x, y = position
+                    pixels = get_pixel_position(x, y)
+                    self.xcenter, self.ycenter = pixels
+                    self.xbefore, self.ybefore = self.xcenter, self.ycenter
+                else:
+                    self.xcenter, self.ycenter = self.xbefore, self.ybefore
+            else:
+                self.xcenter, self.ycenter = self.xbefore, self.ybefore
+        self.mouse_touch_piece = False
+        self.rect_piece.centerx = self.xcenter
+        self.rect_piece.centery = self.ycenter
 
-                        if position:
-                            x, y = position
-                            pixels = get_pixel_position(x, y)
-                            self.xcenter, self.ycenter = pixels
-                            self.xbefore, self.ybefore = self.xcenter, self.ycenter
-                        else:
-                            self.xcenter, self.ycenter = self.xbefore, self.ybefore
-                    else:
-                        self.xcenter, self.ycenter = self.xbefore, self.ybefore
-                self.mouse_touch_piece = False
-
-            elif event.type == pygame.MOUSEMOTION:
-                if self.rectangle_draging:
-                    mouse_x, mouse_y = event.pos
-                    self.xcenter = mouse_x + offset_x
-                    self.ycenter = mouse_y + offset_y
+    def update_motion(self, event_pos):
+        """"""
+        global offset_x, offset_y
+        global initial_x, initial_y
+        global final_x, final_y
+        if self.rectangle_draging:
+            mouse_x, mouse_y = event_pos
+            self.xcenter = mouse_x + offset_x
+            self.ycenter = mouse_y + offset_y
 
         self.rect_piece.centerx = self.xcenter
         self.rect_piece.centery = self.ycenter
-        self.show()
 
 
 class Queen():
@@ -392,57 +408,61 @@ class Queen():
         """Show a queen at the screen."""
         self.screen.blit(self.image, self.rect_piece)
 
-    def update(self):
-        """Make a piece follow the mouse."""
-
+    def update_click(self, event_pos):
+        """"""
         global offset_x, offset_y
         global initial_x, initial_y
         global final_x, final_y
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                sys.exit()
+        if self.rect_piece.collidepoint(event_pos):
+            self.mouse_touch_piece = True
+            self.rectangle_draging = True
+            mouse_x, mouse_y = event_pos
+            offset_x = self.xcenter - mouse_x
+            offset_y = self.ycenter - mouse_y
+            initial_pos = mc.mouse_coordinates_click(mouse_x, mouse_y)
+            if initial_pos:
+                initial_x, initial_y = initial_pos
+            self.rect_piece.centerx = self.xcenter
+            self.rect_piece.centery = self.ycenter
 
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    if self.rect_piece.collidepoint(event.pos):
-                        self.mouse_touch_piece = True
-                        self.rectangle_draging = True
-                        mouse_x, mouse_y = event.pos
-                        offset_x = self.xcenter - mouse_x
-                        offset_y = self.ycenter - mouse_y
-                        initial_pos = mc.mouse_coordinates_click(mouse_x, mouse_y)
-                        if initial_pos:
-                            initial_x, initial_y = initial_pos
+    def update_release(self, event_pos):
+        """"""
+        global offset_x, offset_y
+        global initial_x, initial_y
+        global final_x, final_y
+        if self.mouse_touch_piece:
+            mouse_x, mouse_y = event_pos
+            self.rectangle_draging = False
+            final_pos = mc.mouse_coordinates_release(mouse_x, mouse_y)
+            if final_pos:
+                final_x, final_y = final_pos
+                position = vm.move_legal_queen(initial_x, initial_y, final_x, final_y)
 
-            elif event.type == pygame.MOUSEBUTTONUP:
-                if event.button == 1 and self.mouse_touch_piece:
-                    mouse_x, mouse_y = event.pos
-                    self.rectangle_draging = False
-                    final_pos = mc.mouse_coordinates_release(mouse_x, mouse_y)
-                    if final_pos:
-                        final_x, final_y = final_pos
-                        position = vm.move_legal_queen(initial_x, initial_y, final_x, final_y)
+                if position:
+                    x, y = position
+                    pixels = get_pixel_position(x, y)
+                    self.xcenter, self.ycenter = pixels
+                    self.xbefore, self.ybefore = self.xcenter, self.ycenter
+                else:
+                    self.xcenter, self.ycenter = self.xbefore, self.ybefore
+            else:
+                self.xcenter, self.ycenter = self.xbefore, self.ybefore
+        self.mouse_touch_piece = False
+        self.rect_piece.centerx = self.xcenter
+        self.rect_piece.centery = self.ycenter
 
-                        if position:
-                            x, y = position
-                            pixels = get_pixel_position(x, y)
-                            self.xcenter, self.ycenter = pixels
-                            self.xbefore, self.ybefore = self.xcenter, self.ycenter
-                        else:
-                            self.xcenter, self.ycenter = self.xbefore, self.ybefore
-                    else:
-                        self.xcenter, self.ycenter = self.xbefore, self.ybefore
-                self.mouse_touch_piece = False
-
-            elif event.type == pygame.MOUSEMOTION:
-                if self.rectangle_draging:
-                    mouse_x, mouse_y = event.pos
-                    self.xcenter = mouse_x + offset_x
-                    self.ycenter = mouse_y + offset_y
+    def update_motion(self, event_pos):
+        """"""
+        global offset_x, offset_y
+        global initial_x, initial_y
+        global final_x, final_y
+        if self.rectangle_draging:
+            mouse_x, mouse_y = event_pos
+            self.xcenter = mouse_x + offset_x
+            self.ycenter = mouse_y + offset_y
 
         self.rect_piece.centerx = self.xcenter
         self.rect_piece.centery = self.ycenter
-        self.show()
 
 
 class King():
@@ -479,57 +499,61 @@ class King():
         """Show a king at the screen."""
         self.screen.blit(self.image, self.rect_piece)
 
-    def update(self):
-        """Make a piece follow the mouse."""
-
+    def update_click(self, event_pos):
+        """"""
         global offset_x, offset_y
         global initial_x, initial_y
         global final_x, final_y
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                sys.exit()
+        if self.rect_piece.collidepoint(event_pos):
+            self.mouse_touch_piece = True
+            self.rectangle_draging = True
+            mouse_x, mouse_y = event_pos
+            offset_x = self.xcenter - mouse_x
+            offset_y = self.ycenter - mouse_y
+            initial_pos = mc.mouse_coordinates_click(mouse_x, mouse_y)
+            if initial_pos:
+                initial_x, initial_y = initial_pos
+            self.rect_piece.centerx = self.xcenter
+            self.rect_piece.centery = self.ycenter
 
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    if self.rect_piece.collidepoint(event.pos):
-                        self.mouse_touch_piece = True
-                        self.rectangle_draging = True
-                        mouse_x, mouse_y = event.pos
-                        offset_x = self.xcenter - mouse_x
-                        offset_y = self.ycenter - mouse_y
-                        initial_pos = mc.mouse_coordinates_click(mouse_x, mouse_y)
-                        if initial_pos:
-                            initial_x, initial_y = initial_pos
+    def update_release(self, event_pos):
+        """"""
+        global offset_x, offset_y
+        global initial_x, initial_y
+        global final_x, final_y
+        if self.mouse_touch_piece:
+            mouse_x, mouse_y = event_pos
+            self.rectangle_draging = False
+            final_pos = mc.mouse_coordinates_release(mouse_x, mouse_y)
+            if final_pos:
+                final_x, final_y = final_pos
+                position = vm.move_legal_king(initial_x, initial_y, final_x, final_y)
 
-            elif event.type == pygame.MOUSEBUTTONUP:
-                if event.button == 1 and self.mouse_touch_piece:
-                    mouse_x, mouse_y = event.pos
-                    self.rectangle_draging = False
-                    final_pos = mc.mouse_coordinates_release(mouse_x, mouse_y)
-                    if final_pos:
-                        final_x, final_y = final_pos
-                        position = vm.move_legal_king(initial_x, initial_y, final_x, final_y)
+                if position:
+                    x, y = position
+                    pixels = get_pixel_position(x, y)
+                    self.xcenter, self.ycenter = pixels
+                    self.xbefore, self.ybefore = self.xcenter, self.ycenter
+                else:
+                    self.xcenter, self.ycenter = self.xbefore, self.ybefore
+            else:
+                self.xcenter, self.ycenter = self.xbefore, self.ybefore
+        self.mouse_touch_piece = False
+        self.rect_piece.centerx = self.xcenter
+        self.rect_piece.centery = self.ycenter
 
-                        if position:
-                            x, y = position
-                            pixels = get_pixel_position(x, y)
-                            self.xcenter, self.ycenter = pixels
-                            self.xbefore, self.ybefore = self.xcenter, self.ycenter
-                        else:
-                            self.xcenter, self.ycenter = self.xbefore, self.ybefore
-                    else:
-                        self.xcenter, self.ycenter = self.xbefore, self.ybefore
-                self.mouse_touch_piece = False
-
-            elif event.type == pygame.MOUSEMOTION:
-                if self.rectangle_draging:
-                    mouse_x, mouse_y = event.pos
-                    self.xcenter = mouse_x + offset_x
-                    self.ycenter = mouse_y + offset_y
+    def update_motion(self, event_pos):
+        """"""
+        global offset_x, offset_y
+        global initial_x, initial_y
+        global final_x, final_y
+        if self.rectangle_draging:
+            mouse_x, mouse_y = event_pos
+            self.xcenter = mouse_x + offset_x
+            self.ycenter = mouse_y + offset_y
 
         self.rect_piece.centerx = self.xcenter
         self.rect_piece.centery = self.ycenter
-        self.show()
 
 
 
