@@ -1,10 +1,11 @@
 import pygame
+import sys
 
 show = False
 piece = None
 
 def check_button_click(buttons):
-    """"""
+    """Check the mouse clicks and react appropriately."""
     global piece
     global show
     import chess as c
@@ -48,6 +49,8 @@ def check_button_click(buttons):
         elif event.type == pygame.MOUSEBUTTONUP:
             if piece:
                 piece.update_release(event.pos)
+        elif event.type == pygame.QUIT:
+            sys.exit()
 
     if piece:
         piece.show()

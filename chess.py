@@ -41,9 +41,6 @@ def run_game():
     # Start main loop.
     while True:
         # Start event loop.
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                sys.exit()
 
         screen.fill(settings.bg_color)
         cases.draw_squares()

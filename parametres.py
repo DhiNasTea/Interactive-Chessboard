@@ -18,5 +18,5 @@ class Settings():
         # Parametres des buttons
         self.button_width = 100
         self.button_height = 55
-        self.button_color = (210, 210, 210)
+        self.button_color = (70, 70, 70)
         self.space_between = 15
