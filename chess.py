@@ -4,12 +4,13 @@ from cases import Cases
 from buttons import Button
 import game_functionalities as gf
 import pieces as p
+import rules_display as rd
 
 
 settings = Settings()
 screen = pygame.display.set_mode((settings.screen_width, settings.screen_height))
 
-bishop = p.Bishop(screen, 'black', 1, 1)
+bishop = p.Bishop(screen, 'black', 4, 4)
 queen = p.Queen(screen, 'white', 7, 2)
 knight = p.Knight(screen, 'black', 2, 8)
 rook = p.Rook(screen, 'white', 7, 8)
@@ -46,6 +47,8 @@ def run_game():
         for button in buttons:
             button.prep_msg()
             button.show_button()
+        if p.rule_display:
+            rd.show_rule(screen, p.rule_display)
         gf.check_button_click(buttons)
 
         # Refresh screen.

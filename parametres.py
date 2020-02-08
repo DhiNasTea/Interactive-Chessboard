@@ -20,3 +20,7 @@ class Settings():
         self.button_height = 55
         self.button_color = (70, 70, 70)
         self.space_between = 15
+
+        #Parametres des règles
+        self.rules_centerx = 660
+        self.rules_topy = 60

@@ -4,6 +4,9 @@ import verify_move as vm
 import sys
 
 
+rule_display = False
+
+
 def get_pixel_position(abscisse, ordonnee):
     """Translate the coordinates in pixels"""
     x_pixels = 60 + (abscisse - 1) * 60 + 30
@@ -14,7 +17,9 @@ def get_pixel_position(abscisse, ordonnee):
 
 
 class Bishop():
+    global rule_display
     """A representation of a bishop"""
+
     def __init__(self, screen, color, abscisse, ordonnee):
         self.abscisse = abscisse
         self.ordonnee = ordonnee
@@ -65,6 +70,7 @@ class Bishop():
 
     def update_release(self, event_pos):
         """"""
+        global rule_display
         global offset_x, offset_y
         global initial_x, initial_y
         global final_x, final_y
@@ -83,8 +89,10 @@ class Bishop():
                     self.xbefore, self.ybefore = self.xcenter, self.ycenter
                 else:
                     self.xcenter, self.ycenter = self.xbefore, self.ybefore
+                    rule_display = "fou"
             else:
                 self.xcenter, self.ycenter = self.xbefore, self.ybefore
+                rule_display = "fou"
         self.mouse_touch_piece = False
         self.rect_piece.centerx = self.xcenter
         self.rect_piece.centery = self.ycenter
@@ -104,6 +112,7 @@ class Bishop():
 
 
 class Pawn():
+    global rule_display
     """A representation of a pawn"""
 
     def __init__(self, screen, color, abscisse, ordonnee):
@@ -159,6 +168,7 @@ class Pawn():
         global offset_x, offset_y
         global initial_x, initial_y
         global final_x, final_y
+        global rule_display
         if self.mouse_touch_piece:
             mouse_x, mouse_y = event_pos
             self.rectangle_draging = False
@@ -174,8 +184,10 @@ class Pawn():
                     self.xbefore, self.ybefore = self.xcenter, self.ycenter
                 else:
                     self.xcenter, self.ycenter = self.xbefore, self.ybefore
+                    rule_display = "pion"
             else:
                 self.xcenter, self.ycenter = self.xbefore, self.ybefore
+                rule_display = "pion"
         self.mouse_touch_piece = False
         self.rect_piece.centerx = self.xcenter
         self.rect_piece.centery = self.ycenter
@@ -195,7 +207,9 @@ class Pawn():
 
 
 class Knight():
+    global rule_display
     """A representation of a knight"""
+
     def __init__(self, screen, color, abscisse, ordonnee):
         self.abscisse = abscisse
         self.ordonnee = ordonnee
@@ -249,6 +263,7 @@ class Knight():
         global offset_x, offset_y
         global initial_x, initial_y
         global final_x, final_y
+        global rule_display
         if self.mouse_touch_piece:
             mouse_x, mouse_y = event_pos
             self.rectangle_draging = False
@@ -264,8 +279,10 @@ class Knight():
                     self.xbefore, self.ybefore = self.xcenter, self.ycenter
                 else:
                     self.xcenter, self.ycenter = self.xbefore, self.ybefore
+                    rule_display = "cavalier"
             else:
                 self.xcenter, self.ycenter = self.xbefore, self.ybefore
+                rule_display = "cavalier"
         self.mouse_touch_piece = False
         self.rect_piece.centerx = self.xcenter
         self.rect_piece.centery = self.ycenter
@@ -285,7 +302,9 @@ class Knight():
 
 
 class Rook():
+    global rule_display
     """A representation of a rook"""
+
     def __init__(self, screen, color, abscisse, ordonnee):
         self.abscisse = abscisse
         self.ordonnee = ordonnee
@@ -339,6 +358,7 @@ class Rook():
         global offset_x, offset_y
         global initial_x, initial_y
         global final_x, final_y
+        global rule_display
         if self.mouse_touch_piece:
             mouse_x, mouse_y = event_pos
             self.rectangle_draging = False
@@ -354,8 +374,10 @@ class Rook():
                     self.xbefore, self.ybefore = self.xcenter, self.ycenter
                 else:
                     self.xcenter, self.ycenter = self.xbefore, self.ybefore
+                    rule_display = "tour"
             else:
                 self.xcenter, self.ycenter = self.xbefore, self.ybefore
+                rule_display = "tour"
         self.mouse_touch_piece = False
         self.rect_piece.centerx = self.xcenter
         self.rect_piece.centery = self.ycenter
@@ -375,6 +397,7 @@ class Rook():
 
 
 class Queen():
+    global rule_display
     """A representation of a queen."""
 
     def __init__(self, screen, color, abscisse, ordonnee):
@@ -430,6 +453,7 @@ class Queen():
         global offset_x, offset_y
         global initial_x, initial_y
         global final_x, final_y
+        global rule_display
         if self.mouse_touch_piece:
             mouse_x, mouse_y = event_pos
             self.rectangle_draging = False
@@ -445,8 +469,10 @@ class Queen():
                     self.xbefore, self.ybefore = self.xcenter, self.ycenter
                 else:
                     self.xcenter, self.ycenter = self.xbefore, self.ybefore
+                    rule_display = "reine"
             else:
                 self.xcenter, self.ycenter = self.xbefore, self.ybefore
+                rule_display = "reine"
         self.mouse_touch_piece = False
         self.rect_piece.centerx = self.xcenter
         self.rect_piece.centery = self.ycenter
@@ -466,6 +492,7 @@ class Queen():
 
 
 class King():
+    global rule_display
     """A representation of a king"""
 
     def __init__(self, screen, color, abscisse, ordonnee):
@@ -521,6 +548,7 @@ class King():
         global offset_x, offset_y
         global initial_x, initial_y
         global final_x, final_y
+        global rule_display
         if self.mouse_touch_piece:
             mouse_x, mouse_y = event_pos
             self.rectangle_draging = False
@@ -536,8 +564,10 @@ class King():
                     self.xbefore, self.ybefore = self.xcenter, self.ycenter
                 else:
                     self.xcenter, self.ycenter = self.xbefore, self.ybefore
+                    rule_display = "roi"
             else:
                 self.xcenter, self.ycenter = self.xbefore, self.ybefore
+                rule_display = "roi"
         self.mouse_touch_piece = False
         self.rect_piece.centerx = self.xcenter
         self.rect_piece.centery = self.ycenter

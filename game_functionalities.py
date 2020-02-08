@@ -1,5 +1,7 @@
 import pygame
 import sys
+import rules_display as rd
+import pieces as p
 
 show = False
 piece = None
@@ -54,6 +56,7 @@ def check_button_click(buttons):
 
     if piece:
         piece.show()
+
 
 
 
