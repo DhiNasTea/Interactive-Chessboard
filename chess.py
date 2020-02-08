@@ -1,4 +1,3 @@
-import sys
 import pygame
 from parametres import Settings
 from cases import Cases
@@ -10,7 +9,7 @@ import pieces as p
 settings = Settings()
 screen = pygame.display.set_mode((settings.screen_width, settings.screen_height))
 
-bishop = p.Bishop(screen, 'black', 5, 3)
+bishop = p.Bishop(screen, 'black', 1, 1)
 queen = p.Queen(screen, 'white', 7, 2)
 knight = p.Knight(screen, 'black', 2, 8)
 rook = p.Rook(screen, 'white', 7, 8)
