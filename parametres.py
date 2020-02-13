@@ -22,5 +22,5 @@ class Settings():
         self.space_between = 15
 
         #Parametres des règles
-        self.rules_centerx = 660
+        self.rules_centerx = 665
         self.rules_topy = 60
