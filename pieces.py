@@ -52,7 +52,7 @@ class Bishop():
         self.screen.blit(self.image, self.rect_piece)
 
     def update_click(self, event_pos):
-        """"""
+        """Detect mouse clicks on the bishop."""
         global offset_x, offset_y
         global initial_x, initial_y
         global final_x, final_y
